@@ -2,6 +2,21 @@ html {
   font-size: 14px;
 }
 
+.auth-panel { max-width: 430px; margin: 3rem auto; padding: 2rem; border: 1px solid #dee2e6; border-radius: .75rem; }
+.form-panel { max-width: 620px; }
+
+.landing {
+  min-height: 75vh;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+.landing-content { max-width: 640px; }
+.landing-eyebrow { color: #0d6efd; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.landing-description { color: #5b6470; font-size: 1.15rem; margin: 1rem auto 2rem; }
+.landing-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: .75rem; }
+
 @media (min-width: 768px) {
   html {
     font-size: 16px;
@@ -18,7 +33,7 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+  margin-bottom: 2rem;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {

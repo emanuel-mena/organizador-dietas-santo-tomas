@@ -1,0 +1,15 @@
+@model AssociatePatientViewModel
+@{
+    ViewData["Title"] = "Asociar paciente";
+}
+<h1>Asociar paciente existente</h1>
+<p>Ingrese el correo exacto de una cuenta de paciente.</p>
+<form asp-action="AssociatePatient" method="post" class="form-panel">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="mb-3"><label asp-for="Email" class="form-label"></label><input asp-for="Email"
+                                                                                   class="form-control" /><span asp-validation-for="Email" class="text-danger"></span></div>
+        <button class="btn btn-primary" type="submit">Asociar paciente</button>
+    </form>
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }

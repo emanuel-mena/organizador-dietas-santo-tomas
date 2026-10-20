@@ -1,0 +1,32 @@
+@model CreateUserViewModel
+@{ ViewData["Title"] = "Crear usuario"; }
+<h1>Crear usuario</h1>
+<form asp-action="CreateUser" method="post" class="form-panel">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="mb-3"><label asp-for="FullName" class="form-label"></label><input asp-for="FullName" class="form-control" /><span asp-validation-for="FullName" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Email" class="form-label"></label><input asp-for="Email" class="form-control" /><span asp-validation-for="Email" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Password" class="form-label"></label><input asp-for="Password" class="form-control" /><span asp-validation-for="Password" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Role" class="form-label"></label><select asp-for="Role" class="form-select" id="role-select"><option value="">Seleccione un rol</option><option value="@AppRoles.Administrator">Administrador</option><option value="@AppRoles.Doctor">Médico</option><option value="@AppRoles.Patient">Paciente</option></select><span asp-validation-for="Role" class="text-danger"></span></div>
+    <div id="doctors-field" class="mb-3" hidden>
+        <label asp-for="DoctorIds" class="form-label"></label>
+        <select asp-for="DoctorIds" class="form-select" multiple size="5">
+            @foreach (var doctor in Model.AvailableDoctors) { <option value="@doctor.Id">@doctor.FullName (@doctor.Email)</option> }
+        </select>
+        <div class="form-text">Use Ctrl para seleccionar varios. Puede dejarlo vacío.</div>
+    </div>
+    <button class="btn btn-primary" type="submit">Crear usuario</button>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const roleSelect = document.getElementById('role-select');
+        const doctorsField = document.getElementById('doctors-field');
+        function updateDoctors() {
+            const isPatient = roleSelect.value === '@AppRoles.Patient';
+            doctorsField.hidden = !isPatient;
+            doctorsField.querySelector('select').disabled = !isPatient;
+        }
+        roleSelect.addEventListener('change', updateDoctors);
+        updateDoctors();
+    </script>
+}

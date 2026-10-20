@@ -1,0 +1,32 @@
+@model IReadOnlyList<UserListItem>
+@{
+    ViewData["Title"] = "Inicio paciente";
+}
+<h1>Área del paciente</h1>
+<h2 class="h4 mt-4">Mis médicos</h2>
+@if (Model.Count == 0)
+{
+    <p>Aún no tiene médicos asociados.</p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var doctor in Model)
+                {
+                    <tr>
+                        <td>@doctor.FullName</td>
+                        <td>@doctor.Email</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
