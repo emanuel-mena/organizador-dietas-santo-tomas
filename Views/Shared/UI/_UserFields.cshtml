@@ -1,0 +1,4 @@
+@model CreateUserViewModel
+<div class="ui-field"><label asp-for="FullName" class="ui-label"></label><input asp-for="FullName" class="ui-input" autocomplete="off" aria-describedby="FullName-validation" /><span asp-validation-for="FullName" id="FullName-validation" class="ui-error"></span></div>
+<div class="ui-field"><label asp-for="Email" class="ui-label"></label><input asp-for="Email" class="ui-input" autocomplete="off" aria-describedby="Email-validation" /><span asp-validation-for="Email" id="Email-validation" class="ui-error"></span></div>
+<div class="ui-field"><label asp-for="Password" class="ui-label"></label><input asp-for="Password" class="ui-input" autocomplete="new-password" aria-describedby="password-hint Password-validation" /><p class="ui-hint" id="password-hint">Al menos 8 caracteres, con mayúscula, minúscula, número y símbolo.</p><span asp-validation-for="Password" id="Password-validation" class="ui-error"></span></div>

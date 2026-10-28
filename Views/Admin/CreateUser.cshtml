@@ -1,32 +1,21 @@
 @model CreateUserViewModel
 @{ ViewData["Title"] = "Crear usuario"; }
-<h1>Crear usuario</h1>
-<form asp-action="CreateUser" method="post" class="form-panel">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="mb-3"><label asp-for="FullName" class="form-label"></label><input asp-for="FullName" class="form-control" /><span asp-validation-for="FullName" class="text-danger"></span></div>
-    <div class="mb-3"><label asp-for="Email" class="form-label"></label><input asp-for="Email" class="form-control" /><span asp-validation-for="Email" class="text-danger"></span></div>
-    <div class="mb-3"><label asp-for="Password" class="form-label"></label><input asp-for="Password" class="form-control" /><span asp-validation-for="Password" class="text-danger"></span></div>
-    <div class="mb-3"><label asp-for="Role" class="form-label"></label><select asp-for="Role" class="form-select" id="role-select"><option value="">Seleccione un rol</option><option value="@AppRoles.Administrator">Administrador</option><option value="@AppRoles.Doctor">Médico</option><option value="@AppRoles.Patient">Paciente</option></select><span asp-validation-for="Role" class="text-danger"></span></div>
-    <div id="doctors-field" class="mb-3" hidden>
-        <label asp-for="DoctorIds" class="form-label"></label>
-        <select asp-for="DoctorIds" class="form-select" multiple size="5">
-            @foreach (var doctor in Model.AvailableDoctors) { <option value="@doctor.Id">@doctor.FullName (@doctor.Email)</option> }
-        </select>
-        <div class="form-text">Use Ctrl para seleccionar varios. Puede dejarlo vacío.</div>
-    </div>
-    <button class="btn btn-primary" type="submit">Crear usuario</button>
-</form>
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-    <script>
-        const roleSelect = document.getElementById('role-select');
-        const doctorsField = document.getElementById('doctors-field');
-        function updateDoctors() {
-            const isPatient = roleSelect.value === '@AppRoles.Patient';
-            doctorsField.hidden = !isPatient;
-            doctorsField.querySelector('select').disabled = !isPatient;
-        }
-        roleSelect.addEventListener('change', updateDoctors);
-        updateDoctors();
-    </script>
-}
+<div class="ui-page-header"><div><p class="ui-eyebrow">Administración</p><h1>Crear usuario</h1><p class="ui-description">Prepara una nueva cuenta y sus asociaciones.</p></div><a class="ui-btn ui-btn-secondary" asp-action="Users">Volver a usuarios</a></div>
+<section class="ui-card max-w-2xl" aria-label="Datos del nuevo usuario">
+    <form asp-action="CreateUser" method="post" class="ui-form" novalidate>
+        <p class="ui-hint">Todos los campos son obligatorios excepto la selección de médicos.</p>
+        <div asp-validation-summary="ModelOnly" class="ui-validation" role="alert" tabindex="-1"></div>
+        <partial name="UI/_UserFields" model="Model" />
+        <div class="ui-field"><label asp-for="Role" class="ui-label"></label><select asp-for="Role" class="ui-input" aria-describedby="Role-validation" data-role-select><option value="">Selecciona un rol</option><option value="@AppRoles.Administrator">Administrador</option><option value="@AppRoles.Doctor">Médico</option><option value="@AppRoles.Patient">Paciente</option></select><span asp-validation-for="Role" id="Role-validation" class="ui-error"></span></div>
+        <fieldset class="space-y-3" data-doctors-field data-patient-role="@AppRoles.Patient">
+            <legend class="ui-label mb-2">Médicos asociados (opcional)</legend><p class="ui-hint" id="doctors-hint">Selecciona uno o varios médicos, o deja la selección vacía.</p>
+            @foreach (var doctor in Model.AvailableDoctors)
+            {
+                <label class="ui-choice"><input type="checkbox" name="DoctorIds" value="@doctor.Id" checked="@Model.DoctorIds.Contains(doctor.Id)" aria-describedby="doctors-hint" /><span class="min-w-0 break-words"><span class="block font-medium">@doctor.FullName</span><span class="block break-all text-sm text-muted">@doctor.Email</span></span></label>
+            }
+            @if (Model.AvailableDoctors.Count == 0) { <p class="ui-hint">Todavía no hay médicos registrados.</p> }
+        </fieldset>
+        <button class="ui-btn ui-btn-primary" type="submit"><partial name="UI/_Icon" model='@("plus")' />Crear usuario</button>
+    </form>
+</section>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

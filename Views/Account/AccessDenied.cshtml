@@ -1,4 +1,2 @@
 @{ ViewData["Title"] = "Acceso denegado"; }
-<h1>Acceso denegado</h1>
-<p>No tiene permiso para acceder a esta página.</p>
-<a asp-controller="Home" asp-action="Index">Volver al inicio</a>
+<section class="ui-card mx-auto max-w-xl text-center" aria-labelledby="denied-title"><span class="ui-brand-mark mx-auto mb-6"><partial name="UI/_Icon" model='@("shield")' /></span><p class="ui-eyebrow">Acceso restringido</p><h1 id="denied-title">Acceso denegado</h1><p class="ui-description mb-6">Tu cuenta no tiene permiso para acceder a esta página.</p><a class="ui-btn ui-btn-primary" asp-controller="Home" asp-action="Index">Volver al inicio</a></section>

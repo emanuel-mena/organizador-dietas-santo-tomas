@@ -1,16 +1,19 @@
 @model RegisterViewModel
-@{ ViewData["Title"] = "Registrarse"; }
-<div class="auth-panel">
-    <h1>Crear cuenta</h1>
-    <form asp-action="Register" method="post">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="mb-3"><label asp-for="FullName" class="form-label"></label><input asp-for="FullName" class="form-control" /><span asp-validation-for="FullName" class="text-danger"></span></div>
-        <div class="mb-3"><label asp-for="Email" class="form-label"></label><input asp-for="Email" class="form-control" autocomplete="username" /><span asp-validation-for="Email" class="text-danger"></span></div>
-        <div class="mb-3"><label asp-for="Role" class="form-label"></label><select asp-for="Role" class="form-select"><option value="">Seleccione un rol</option><option value="@AppRoles.Patient">Paciente</option><option value="@AppRoles.Doctor">Médico</option></select><span asp-validation-for="Role" class="text-danger"></span></div>
-        <div class="mb-3"><label asp-for="Password" class="form-label"></label><input asp-for="Password" class="form-control" autocomplete="new-password" /><span asp-validation-for="Password" class="text-danger"></span></div>
-        <div class="mb-3"><label asp-for="ConfirmPassword" class="form-label"></label><input asp-for="ConfirmPassword" class="form-control" autocomplete="new-password" /><span asp-validation-for="ConfirmPassword" class="text-danger"></span></div>
-        <button class="btn btn-primary w-100" type="submit">Crear cuenta</button>
-    </form>
-    <p class="mt-3 mb-0">¿Ya tiene cuenta? <a asp-action="Login">Inicie sesión</a>.</p>
+@{ ViewData["Title"] = "Crear cuenta"; }
+<div class="ui-auth">
+    <aside class="ui-card ui-card-accent flex flex-col justify-between gap-8"><span class="ui-brand-mark bg-white"><partial name="UI/_Icon" model='@("users")' /></span><div><p class="ui-eyebrow">Un nuevo comienzo</p><h2>Conecta con una forma más simple de cuidarte.</h2><p class="ui-description">Crea tu cuenta como médico o paciente para empezar.</p></div></aside>
+    <section class="ui-card" aria-labelledby="register-title">
+        <p class="ui-eyebrow">Comienza aquí</p><h1 id="register-title">Crear cuenta</h1><p class="ui-description mb-7">Todos los campos son obligatorios.</p>
+        <form asp-action="Register" method="post" class="ui-form" novalidate>
+            <div asp-validation-summary="ModelOnly" class="ui-validation" role="alert" tabindex="-1"></div>
+            <div class="ui-field"><label asp-for="FullName" class="ui-label"></label><input asp-for="FullName" class="ui-input" autocomplete="name" aria-describedby="FullName-validation" /><span asp-validation-for="FullName" id="FullName-validation" class="ui-error"></span></div>
+            <div class="ui-field"><label asp-for="Email" class="ui-label"></label><input asp-for="Email" class="ui-input" autocomplete="username" aria-describedby="Email-validation" /><span asp-validation-for="Email" id="Email-validation" class="ui-error"></span></div>
+            <div class="ui-field"><label asp-for="Role" class="ui-label"></label><select asp-for="Role" class="ui-input" aria-describedby="Role-validation"><option value="">Selecciona un rol</option><option value="@AppRoles.Patient">Paciente</option><option value="@AppRoles.Doctor">Médico</option></select><span asp-validation-for="Role" id="Role-validation" class="ui-error"></span></div>
+            <div class="ui-field"><label asp-for="Password" class="ui-label"></label><input asp-for="Password" class="ui-input" autocomplete="new-password" aria-describedby="password-hint Password-validation" /><p class="ui-hint" id="password-hint">Al menos 8 caracteres, con mayúscula, minúscula, número y símbolo.</p><span asp-validation-for="Password" id="Password-validation" class="ui-error"></span></div>
+            <div class="ui-field"><label asp-for="ConfirmPassword" class="ui-label"></label><input asp-for="ConfirmPassword" class="ui-input" autocomplete="new-password" aria-describedby="ConfirmPassword-validation" /><span asp-validation-for="ConfirmPassword" id="ConfirmPassword-validation" class="ui-error"></span></div>
+            <button class="ui-btn ui-btn-primary w-full" type="submit">Crear cuenta<partial name="UI/_Icon" model='@("arrow")' /></button>
+        </form>
+        <p class="mt-6 text-sm text-muted">¿Ya tienes cuenta? <a class="ui-link" asp-action="Login">Inicia sesión</a>.</p>
+    </section>
 </div>
 @section Scripts { <partial name="_ValidationScriptsPartial" /> }

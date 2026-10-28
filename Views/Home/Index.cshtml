@@ -1,16 +1,14 @@
-@{
-    ViewData["Title"] = "Inicio";
-    ViewData["HideNavigation"] = true;
-}
-
-<section class="landing" aria-labelledby="landing-title">
-    <div class="landing-content">
-        <p class="landing-eyebrow">Santo Tomás</p>
-        <h1 id="landing-title">Organizador de dietas</h1>
-        <p class="landing-description">Un espacio para que médicos y pacientes gestionen su información desde una sola cuenta.</p>
-        <div class="landing-actions">
-            <a class="btn btn-primary btn-lg" asp-controller="Account" asp-action="Register">Registrarse</a>
-            <a class="btn btn-outline-primary btn-lg" asp-controller="Account" asp-action="Login">Iniciar sesión</a>
-        </div>
+@{ ViewData["Title"] = "Inicio"; }
+<section class="ui-hero" aria-labelledby="landing-title">
+    <div class="ui-hero-copy">
+        <span class="ui-badge ui-badge-success mb-8">Bienestar que se organiza</span>
+        <h1 id="landing-title">Una buena alimentación empieza con un buen plan.</h1>
+        <p class="mt-6 text-lg">Organiza tu información y conecta con tu equipo médico en un solo lugar.</p>
+        <div class="ui-actions mt-8"><a class="ui-btn ui-btn-accent" asp-controller="Account" asp-action="Register">Crear mi cuenta<partial name="UI/_Icon" model='@("arrow")' /></a><a class="ui-btn border-white text-white hover:bg-evergreen" asp-controller="Account" asp-action="Login">Ya tengo una cuenta</a></div>
+        <p class="mt-10 text-sm">Para médicos y pacientes de Santo Tomás.</p>
+    </div>
+    <div class="grid gap-6">
+        <article class="ui-card ui-card-accent flex flex-col justify-between gap-8"><span class="ui-brand-mark bg-white"><partial name="UI/_Icon" model='@("leaf")' /></span><div><p class="ui-eyebrow">Cuidarte, paso a paso</p><h2>Tu bienestar merece un espacio propio.</h2><p class="ui-description">Accede a tu cuenta y mantén a mano la información de tus médicos.</p></div></article>
+        <article class="ui-card"><span class="ui-brand-mark mb-5"><partial name="UI/_Icon" model='@("users")' /></span><h2 class="text-xl">Un equipo, una conexión</h2><p class="ui-description">Los médicos pueden crear y asociar pacientes. Cada paciente puede consultar su equipo médico.</p></article>
     </div>
 </section>

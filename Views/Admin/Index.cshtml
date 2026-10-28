@@ -1,7 +1,6 @@
-@{
-    ViewData["Title"] = "Administración";
-}
-<h1>Administración</h1>
-<p>Gestione las cuentas del sistema.</p>
-<div class="d-flex gap-2"><a class="btn btn-primary" asp-action="Users">Ver usuarios</a><a
-class="btn btn-outline-primary" asp-action="CreateUser">Crear usuario</a></div>
+@{ ViewData["Title"] = "Administración"; }
+<div class="ui-page-header"><div><p class="ui-eyebrow">Panel de administración</p><h1>Todo tu equipo, conectado.</h1><p class="ui-description">Gestiona las cuentas y facilita la conexión entre médicos y pacientes.</p></div></div>
+<div class="grid gap-6 md:grid-cols-2">
+    <article class="ui-card ui-card-dark"><span class="ui-brand-mark mb-8"><partial name="UI/_Icon" model='@("users")' /></span><h2>Personas que hacen equipo</h2><p class="ui-description mb-7">Consulta las cuentas registradas y sus roles en la aplicación.</p><a class="ui-btn ui-btn-accent" asp-action="Users">Ver usuarios<partial name="UI/_Icon" model='@("arrow")' /></a></article>
+    <article class="ui-card"><span class="ui-brand-mark mb-8"><partial name="UI/_Icon" model='@("plus")' /></span><h2>Un nuevo integrante</h2><p class="ui-description mb-7">Crea cuentas de administrador, médico o paciente y define sus asociaciones.</p><a class="ui-btn ui-btn-secondary" asp-action="CreateUser">Crear usuario</a></article>
+</div>

@@ -1,15 +1,11 @@
 @model AssociatePatientViewModel
-@{
-    ViewData["Title"] = "Asociar paciente";
-}
-<h1>Asociar paciente existente</h1>
-<p>Ingrese el correo exacto de una cuenta de paciente.</p>
-<form asp-action="AssociatePatient" method="post" class="form-panel">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="mb-3"><label asp-for="Email" class="form-label"></label><input asp-for="Email"
-                                                                                   class="form-control" /><span asp-validation-for="Email" class="text-danger"></span></div>
-        <button class="btn btn-primary" type="submit">Asociar paciente</button>
+@{ ViewData["Title"] = "Asociar paciente"; }
+<div class="ui-page-header"><div><p class="ui-eyebrow">Equipo médico</p><h1>Asociar paciente</h1><p class="ui-description">Conecta con una cuenta de paciente existente.</p></div><a class="ui-btn ui-btn-secondary" asp-action="Patients">Volver a pacientes</a></div>
+<section class="ui-card max-w-2xl" aria-label="Asociación de paciente">
+    <form asp-action="AssociatePatient" method="post" class="ui-form" novalidate>
+        <div asp-validation-summary="ModelOnly" class="ui-validation" role="alert" tabindex="-1"></div>
+        <div class="ui-field"><label asp-for="Email" class="ui-label"></label><input asp-for="Email" class="ui-input" autocomplete="off" aria-describedby="email-hint Email-validation" /><p class="ui-hint" id="email-hint">Ingresa el correo exacto con el que se registró el paciente.</p><span asp-validation-for="Email" id="Email-validation" class="ui-error"></span></div>
+        <button class="ui-btn ui-btn-primary" type="submit"><partial name="UI/_Icon" model='@("link")' />Asociar paciente</button>
     </form>
-    @section Scripts {
-        <partial name="_ValidationScriptsPartial" />
-    }
+</section>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

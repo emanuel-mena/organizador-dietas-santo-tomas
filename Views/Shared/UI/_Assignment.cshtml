@@ -1,0 +1,5 @@
+@model AssignmentUiModel
+<article class="ui-card">
+    <div class="mb-5 flex flex-wrap items-center justify-between gap-3"><h3>Resumen de asignación</h3><partial name="UI/_Badge" model="@(new BadgeUiModel(Model.Status, "warning"))" /></div>
+    <dl class="grid gap-4 text-sm"><div><dt class="text-muted">Paciente</dt><dd class="font-semibold" data-preview-patient>@Model.PatientName</dd></div><div><dt class="text-muted">Dieta</dt><dd class="font-semibold" data-preview-diet>@Model.DietName</dd></div><div><dt class="text-muted">Periodo</dt><dd><time data-preview-start datetime="@Model.Start.ToString("yyyy-MM-dd")">@Model.Start.ToString("dd/MM/yyyy")</time> – <time data-preview-end datetime="@Model.End.ToString("yyyy-MM-dd")">@Model.End.ToString("dd/MM/yyyy")</time></dd></div></dl>
+</article>

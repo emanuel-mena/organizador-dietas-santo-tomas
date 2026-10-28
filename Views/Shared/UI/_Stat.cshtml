@@ -1,0 +1,6 @@
+@model StatUiModel
+<article class="ui-card">
+    <div class="flex items-center gap-3"><span class="ui-brand-mark"><partial name="UI/_Icon" model="Model.Icon" /></span><h2 class="text-base">@Model.Label</h2></div>
+    <p class="ui-stat">@Model.Value</p>
+    <p class="ui-description text-sm">@Model.Description</p>
+</article>

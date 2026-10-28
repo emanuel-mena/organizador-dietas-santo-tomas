@@ -1,8 +1,6 @@
-@{
-    ViewData["Title"] = "Inicio médico";
-}
-<h1>Área médica</h1>
-<p>Gestione sus pacientes asociados.</p>
-<div class="d-flex gap-2 flex-wrap"><a class="btn btn-primary" asp-action="Patients">Mis pacientes</a><a
-class="btn btn-outline-primary" asp-action="CreatePatient">Crear paciente</a><a class="btn btn-outline-primary"
-                                                                                asp-action="AssociatePatient">Asociar paciente existente</a></div>
+@{ ViewData["Title"] = "Inicio médico"; }
+<div class="ui-page-header"><div><p class="ui-eyebrow">Área médica</p><h1>Acompaña cada paso.</h1><p class="ui-description">Organiza tu equipo de pacientes y mantén sus cuentas conectadas contigo.</p></div><a class="ui-btn ui-btn-primary" asp-action="Patients">Mis pacientes<partial name="UI/_Icon" model='@("arrow")' /></a></div>
+<div class="grid gap-6 md:grid-cols-2">
+    <article class="ui-card ui-card-accent"><span class="ui-brand-mark mb-8 bg-white"><partial name="UI/_Icon" model='@("plus")' /></span><h2>Empieza una nueva conexión</h2><p class="ui-description mb-7">Registra un nuevo paciente. Su cuenta quedará asociada a la tuya.</p><a class="ui-btn ui-btn-primary" asp-action="CreatePatient">Crear paciente</a></article>
+    <article class="ui-card"><span class="ui-brand-mark mb-8"><partial name="UI/_Icon" model='@("link")' /></span><h2>Conecta con un paciente</h2><p class="ui-description mb-7">Si ya tiene una cuenta, puedes asociarlo usando su correo electrónico.</p><a class="ui-btn ui-btn-secondary" asp-action="AssociatePatient">Asociar paciente existente</a></article>
+</div>

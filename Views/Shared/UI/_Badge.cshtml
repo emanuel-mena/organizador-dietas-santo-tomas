@@ -1,0 +1,3 @@
+@model BadgeUiModel
+@{ var tone = Model.Tone switch { "success" => "ui-badge-success", "warning" => "ui-badge-warning", "danger" => "ui-badge-danger", _ => "" }; }
+<span class="ui-badge @tone">@Model.Text</span>

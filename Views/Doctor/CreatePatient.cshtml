@@ -1,12 +1,13 @@
 @model CreateUserViewModel
 @{ ViewData["Title"] = "Crear paciente"; }
-<h1>Crear paciente</h1>
-<p>El paciente quedará asociado a su cuenta. Si ya tiene cuenta, use <a asp-action="AssociatePatient">Asociar paciente existente</a>.</p>
-<form asp-action="CreatePatient" method="post" class="form-panel">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="mb-3"><label asp-for="FullName" class="form-label"></label><input asp-for="FullName" class="form-control" /><span asp-validation-for="FullName" class="text-danger"></span></div>
-    <div class="mb-3"><label asp-for="Email" class="form-label"></label><input asp-for="Email" class="form-control" /><span asp-validation-for="Email" class="text-danger"></span></div>
-    <div class="mb-3"><label asp-for="Password" class="form-label"></label><input asp-for="Password" class="form-control" /><span asp-validation-for="Password" class="text-danger"></span></div>
-    <button class="btn btn-primary" type="submit">Crear paciente</button>
-</form>
+<div class="ui-page-header"><div><p class="ui-eyebrow">Equipo médico</p><h1>Crear paciente</h1><p class="ui-description">La nueva cuenta quedará asociada a ti.</p></div><a class="ui-btn ui-btn-secondary" asp-action="Patients">Volver a pacientes</a></div>
+<div class="mb-6 max-w-2xl"><partial name="UI/_Alert" model='@(new AlertUiModel("¿El paciente ya tiene cuenta?", "Usa la opción de asociar paciente existente para conectar con su cuenta."))' /><a class="ui-link mt-2 inline-flex min-h-11 items-center" asp-action="AssociatePatient">Asociar paciente existente</a></div>
+<section class="ui-card max-w-2xl" aria-label="Datos del nuevo paciente">
+    <form asp-action="CreatePatient" method="post" class="ui-form" novalidate>
+        <p class="ui-hint">Todos los campos son obligatorios.</p>
+        <div asp-validation-summary="ModelOnly" class="ui-validation" role="alert" tabindex="-1"></div>
+        <partial name="UI/_UserFields" model="Model" />
+        <button class="ui-btn ui-btn-primary" type="submit"><partial name="UI/_Icon" model='@("plus")' />Crear paciente</button>
+    </form>
+</section>
 @section Scripts { <partial name="_ValidationScriptsPartial" /> }

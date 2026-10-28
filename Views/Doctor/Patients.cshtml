@@ -1,39 +1,23 @@
 @model IReadOnlyList<UserListItem>
-@{
-    ViewData["Title"] = "Mis pacientes";
-}
-<h1>Mis pacientes</h1>
-@if (TempData["Message"] is string message)
+@{ ViewData["Title"] = "Mis pacientes"; }
+<div class="ui-page-header"><div><p class="ui-eyebrow">Equipo médico</p><h1>Mis pacientes</h1><p class="ui-description">@Model.Count paciente(s) asociado(s) a tu cuenta.</p></div><div class="ui-actions"><a class="ui-btn ui-btn-primary" asp-action="CreatePatient"><partial name="UI/_Icon" model='@("plus")' />Crear paciente</a><a class="ui-btn ui-btn-secondary" asp-action="AssociatePatient">Asociar existente</a></div></div>
+@if (TempData["Message"] is string message) { <div class="mb-6"><partial name="UI/_Alert" model="@(new AlertUiModel(message))" /></div> }
+@if (Model.Count == 0)
 {
-    <div class="alert alert-success">@message</div>
+    <partial name="UI/_Empty" model='@(new EmptyUiModel("Tu equipo empieza aquí", "Crea un paciente o asocia una cuenta existente para comenzar.", "users"))' />
 }
-<div class="d-flex gap-2 mb-3"><a class="btn btn-primary" asp-action="CreatePatient">Crear paciente</a><a
-    class="btn btn-outline-primary" asp-action="AssociatePatient">Asociar paciente existente</a></div>
-    @if (Model.Count == 0)
-    {
-        <p>Aún no tiene pacientes asociados.</p>
-    }
-    else
-    {
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Correo</th>
-                        <th>Origen</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var patient in Model)
-                    {
-                        <tr>
-                            <td>@patient.FullName</td>
-                            <td>@patient.Email</td>
-                            <td>@(patient.CreatedByCurrentDoctor ? "Creado por usted" : "Asociado")</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+else
+{
+    <section class="ui-card" aria-label="Listado de pacientes" data-search-list>
+        <partial name="UI/_Search" model='@(new SearchUiModel("patients-search", "Buscar pacientes", "Nombre o correo electrónico"))' />
+        <p class="ui-hint mb-3 md:hidden" id="patients-table-help">Desliza la tabla para ver todas las columnas.</p>
+        <div class="ui-table-region" tabindex="0" role="region" aria-label="Tabla de pacientes" aria-describedby="patients-table-help" data-search-results>
+            <table class="ui-table"><caption>Pacientes asociados</caption><thead><tr><th scope="col">Paciente</th><th scope="col">Origen</th></tr></thead><tbody>
+            @foreach (var patient in Model)
+            {
+                <tr data-search-item data-search-text="@patient.FullName @patient.Email"><td><div class="ui-person"><partial name="UI/_Avatar" model="@(new AvatarUiModel(patient.FullName))" /><div class="ui-person-copy"><p class="font-semibold">@patient.FullName</p><p class="text-muted">@patient.Email</p></div></div></td><td><partial name="UI/_Badge" model='@(new BadgeUiModel(patient.CreatedByCurrentDoctor ? "Creado por ti" : "Asociado", "success"))' /></td></tr>
+            }
+            </tbody></table>
         </div>
-    }
+    </section>
+}

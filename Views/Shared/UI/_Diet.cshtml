@@ -1,0 +1,7 @@
+@model DietUiModel
+<article class="ui-card">
+    <div class="mb-5 flex items-center justify-between gap-3"><span class="ui-brand-mark"><partial name="UI/_Icon" model='@("leaf")' /></span><partial name="UI/_Badge" model="@(new BadgeUiModel(Model.Status))" /></div>
+    <h3>@Model.Name</h3><p class="ui-description text-sm">@Model.Description</p>
+    <p class="ui-stat">@Model.Calories <span class="text-base font-normal text-muted">kcal / día</span></p>
+    <dl class="ui-macros"><div><dt>Carbohidratos</dt><dd>@Model.Carbohydrates g</dd></div><div><dt>Proteínas</dt><dd>@Model.Protein g</dd></div><div><dt>Grasas</dt><dd>@Model.Fat g</dd></div></dl>
+</article>

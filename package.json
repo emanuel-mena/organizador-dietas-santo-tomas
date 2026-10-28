@@ -1,0 +1,21 @@
+{
+  "name": "organizador-dietas-santo-tomas",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "build:css": "tailwindcss -i ./Styles/app.css -o ./wwwroot/css/site.css --minify",
+    "watch:css": "tailwindcss -i ./Styles/app.css -o ./wwwroot/css/site.css --watch",
+    "build": "npm run build:css && dotnet build",
+    "publish": "npm run build:css && dotnet publish -c Release",
+    "test:ui": "npm run build:css && node scripts/test-ui.cjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "^1.64.1",
+    "@tailwindcss/cli": "^4.3.3",
+    "tailwindcss": "^4.3.3"
+  }
+}

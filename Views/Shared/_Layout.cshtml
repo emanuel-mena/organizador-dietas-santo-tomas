@@ -1,82 +1,79 @@
-﻿<!DOCTYPE html>
+@inject Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> UserManager
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostEnvironment
+@{
+    var authenticated = User.Identity?.IsAuthenticated == true;
+    var account = authenticated ? await UserManager.GetUserAsync(User) : null;
+    var role = User.IsInRole(AppRoles.Administrator) ? "Administrador" : User.IsInRole(AppRoles.Doctor) ? "Médico" : "Paciente";
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+    var links = new List<(string Controller, string Action, string Label, string Icon)>();
+    if (User.IsInRole(AppRoles.Administrator))
+    {
+        links.Add(("Admin", "Index", "Inicio", "home"));
+        links.Add(("Admin", "Users", "Usuarios", "users"));
+        links.Add(("Admin", "CreateUser", "Crear usuario", "plus"));
+    }
+    if (User.IsInRole(AppRoles.Doctor))
+    {
+        links.Add(("Doctor", "Index", "Inicio", "home"));
+        links.Add(("Doctor", "Patients", "Mis pacientes", "users"));
+        links.Add(("Doctor", "CreatePatient", "Crear paciente", "plus"));
+        links.Add(("Doctor", "AssociatePatient", "Asociar paciente", "link"));
+    }
+    if (User.IsInRole(AppRoles.Patient)) links.Add(("Patient", "Index", "Inicio", "home"));
+    if (HostEnvironment.IsDevelopment()) links.Add(("DesignSystem", "Index", "Componentes", "grid"));
+}
+<!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Organizador de dietas</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <meta name="theme-color" content="#31572c" />
+    <title>@ViewData["Title"] · Santo Tomás</title>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/organizador_dietas_santo_tomas.styles.css" asp-append-version="true" />
+    <noscript><style>[data-navigation] { display: block !important; } [data-nav-toggle] { display: none !important; }</style></noscript>
 </head>
-
 <body>
-    @if (ViewData["HideNavigation"] is not true)
+    <a href="#main-content" class="ui-skip">Saltar al contenido</a>
+    @if (authenticated)
     {
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index">Organizador de dietas</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        @if (User.IsInRole(AppRoles.Administrator))
-                        {
-                            <li class="nav-item"><a class="nav-link" asp-controller="Admin" asp-action="Index">Inicio</a>
-                            </li>
-                            <li class="nav-item"><a class="nav-link" asp-controller="Admin" asp-action="Users">Usuarios</a>
-                            </li>
-                            <li class="nav-item"><a class="nav-link" asp-controller="Admin" asp-action="CreateUser">Crear
-                                usuario</a></li>
-                            }
-                            @if (User.IsInRole(AppRoles.Doctor))
-                            {
-                                <li class="nav-item"><a class="nav-link" asp-controller="Doctor" asp-action="Index">Inicio</a>
-                                </li>
-                                <li class="nav-item"><a class="nav-link" asp-controller="Doctor" asp-action="Patients">Mis
-                                    pacientes</a></li>
-                                    <li class="nav-item"><a class="nav-link" asp-controller="Doctor"
-                                                                asp-action="CreatePatient">Crear paciente</a></li>
-                                        <li class="nav-item"><a class="nav-link" asp-controller="Doctor"
-                                                                    asp-action="AssociatePatient">Asociar paciente</a></li>
-                                        }
-                                        @if (User.IsInRole(AppRoles.Patient))
-                                        {
-                                            <li class="nav-item"><a class="nav-link" asp-controller="Patient" asp-action="Index">Inicio</a>
-                                            </li>
-                                        }
-                                    </ul>
-                                    @if (User.Identity?.IsAuthenticated == true)
-                                    {
-                                        <span class="navbar-text me-3">@User.Identity.Name</span>
-                                        <form asp-controller="Account" asp-action="Logout" method="post">
-                                            <button type="submit" class="btn btn-outline-secondary btn-sm">Cerrar sesión</button>
-                                        </form>
-                                    }
-                                    else
-                                    {
-                                        <a class="nav-link" asp-controller="Account" asp-action="Login">Iniciar sesión</a>
-                                        <a class="btn btn-primary btn-sm" asp-controller="Account" asp-action="Register">Registrarse</a>
-                                    }
-                                </div>
-                            </div>
-                        </nav>
-                    </header>
+        <header class="ui-sidebar">
+            <div class="flex items-center justify-between gap-3">
+                <a class="ui-brand" asp-controller="Home" asp-action="Index"><span class="ui-brand-mark"><partial name="UI/_Icon" model='@("leaf")' /></span><span>Santo Tomás<span class="block text-xs font-normal text-muted">Organizador de dietas</span></span></a>
+                <button class="ui-btn ui-btn-ghost px-3 lg:hidden" type="button" aria-controls="app-navigation" aria-expanded="false" data-nav-toggle><partial name="UI/_Icon" model='@("menu")' /><span class="sr-only">Abrir menú</span></button>
+            </div>
+            <div id="app-navigation" class="hidden lg:flex lg:min-h-0 lg:flex-1 lg:flex-col" data-navigation>
+                <nav class="ui-nav" aria-label="Navegación principal">
+                    @foreach (var link in links)
+                    {
+                        var active = currentController == link.Controller && currentAction == link.Action;
+                        <a class="ui-nav-link" asp-controller="@link.Controller" asp-action="@link.Action" aria-current="@(active ? "page" : null)"><partial name="UI/_Icon" model="link.Icon" />@link.Label</a>
+                    }
+                </nav>
+                <div class="ui-nav-footer">
+                    <partial name="UI/_Profile" model='@(new ProfileUiModel(account?.FullName ?? "Mi cuenta", account?.Email ?? User.Identity?.Name ?? "", role))' />
+                    <form asp-controller="Account" asp-action="Logout" method="post" class="mt-4"><button type="submit" class="ui-btn ui-btn-secondary w-full"><partial name="UI/_Icon" model='@("logout")' />Cerrar sesión</button></form>
+                </div>
+            </div>
+        </header>
     }
-                    <div class="container">
-                        <main role="main" class="pb-3">
-                            @RenderBody()
-                        </main>
-                    </div>
-
-                    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-                    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-                    <script src="~/js/site.js" asp-append-version="true"></script>
-                    @await RenderSectionAsync("Scripts", required: false)
-                </body>
-
-            </html>
+    else
+    {
+        <header class="ui-public-header">
+            <a class="ui-brand" asp-controller="Home" asp-action="Index"><span class="ui-brand-mark"><partial name="UI/_Icon" model='@("leaf")' /></span><span>Santo Tomás<span class="block text-xs font-normal text-muted">Organizador de dietas</span></span></a>
+            <nav class="ui-actions" aria-label="Acceso a la aplicación"><a class="ui-btn ui-btn-ghost" asp-controller="Account" asp-action="Login">Iniciar sesión</a><a class="ui-btn ui-btn-primary" asp-controller="Account" asp-action="Register">Crear cuenta</a></nav>
+        </header>
+    }
+    <div class="@(authenticated ? "ui-workspace" : "")">
+        @if (authenticated)
+        {
+            <div class="ui-topbar"><p class="text-sm text-muted">Tu espacio de bienestar <span aria-hidden="true">/</span> <span class="font-semibold text-evergreen">@role</span></p><span class="ui-badge ui-badge-success"><partial name="UI/_Icon" model='@("leaf")' />Santo Tomás</span></div>
+        }
+        <main id="main-content" class="ui-main" tabindex="-1">@RenderBody()</main>
+        <footer class="ui-footer"><p>Santo Tomás · Un espacio para cuidar tu alimentación.</p>@if (HostEnvironment.IsDevelopment()) { <a class="ui-link inline-flex min-h-11 items-center" asp-controller="DesignSystem" asp-action="Index">Galería de componentes</a> }</footer>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

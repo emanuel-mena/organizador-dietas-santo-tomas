@@ -1,0 +1,5 @@
+@model MealUiModel
+<article class="ui-card">
+    <p class="ui-eyebrow">@Model.Time</p><h3>@Model.Name</h3><p class="ui-description">@Model.Food</p>
+    <dl class="mt-5 flex flex-wrap justify-between gap-4 text-sm"><div><dt class="text-muted">Porción</dt><dd class="font-semibold">@Model.Portion</dd></div><div><dt class="text-muted">Energía</dt><dd class="font-semibold">@Model.Calories kcal</dd></div></dl>
+</article>

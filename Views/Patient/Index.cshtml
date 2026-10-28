@@ -1,32 +1,21 @@
 @model IReadOnlyList<UserListItem>
-@{
-    ViewData["Title"] = "Inicio paciente";
-}
-<h1>Área del paciente</h1>
-<h2 class="h4 mt-4">Mis médicos</h2>
-@if (Model.Count == 0)
-{
-    <p>Aún no tiene médicos asociados.</p>
-}
-else
-{
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Correo</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var doctor in Model)
-                {
-                    <tr>
-                        <td>@doctor.FullName</td>
-                        <td>@doctor.Email</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-}
+@{ ViewData["Title"] = "Inicio paciente"; }
+<div class="ui-page-header"><div><p class="ui-eyebrow">Área del paciente</p><h1>Un equipo para cuidarte.</h1><p class="ui-description">Encuentra aquí a los médicos asociados a tu cuenta.</p></div></div>
+<div class="grid gap-6 lg:grid-cols-[1fr_2fr]">
+    <article class="ui-card ui-card-accent"><span class="ui-brand-mark mb-8 bg-white"><partial name="UI/_Icon" model='@("leaf")' /></span><h2>Tu bienestar, acompañado</h2><p class="ui-description">Mantén a mano los datos de tu equipo médico.</p><p class="ui-stat">@Model.Count</p><p class="text-sm text-muted">Médico(s) asociado(s)</p></article>
+    <section aria-labelledby="doctors-title"><h2 id="doctors-title" class="mb-5">Mis médicos</h2>
+        @if (Model.Count == 0)
+        {
+            <partial name="UI/_Empty" model='@(new EmptyUiModel("Aún no tienes médicos asociados", "Tu médico podrá asociarte utilizando el correo de tu cuenta.", "users"))' />
+        }
+        else
+        {
+            <ul class="grid gap-4">
+            @foreach (var doctor in Model)
+            {
+                <li class="ui-card"><partial name="UI/_Profile" model='@(new ProfileUiModel(doctor.FullName, doctor.Email, "Médico"))' /></li>
+            }
+            </ul>
+        }
+    </section>
+</div>

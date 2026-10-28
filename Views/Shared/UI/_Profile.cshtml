@@ -1,0 +1,10 @@
+@model ProfileUiModel
+<div class="ui-person">
+    <partial name="UI/_Avatar" model="@(new AvatarUiModel(Model.Name))" />
+    <div class="ui-person-copy">
+        <p class="font-semibold">@Model.Name</p>
+        <p class="text-sm text-muted">@Model.Email</p>
+        <p class="text-sm text-hunter-green">@Model.Role</p>
+        @if (!string.IsNullOrWhiteSpace(Model.Detail)) { <p class="text-sm text-muted">@Model.Detail</p> }
+    </div>
+</div>

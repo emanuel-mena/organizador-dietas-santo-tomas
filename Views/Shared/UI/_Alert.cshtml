@@ -1,0 +1,6 @@
+@model AlertUiModel
+@{ var tone = Model.Tone switch { "danger" => "ui-alert-danger", "warning" => "ui-alert-warning", _ => "" }; }
+<div class="ui-alert @tone" role="@(Model.Tone == "danger" ? "alert" : "status")">
+    <partial name="UI/_Icon" model="@(Model.Tone == "success" ? "check" : "alert")" />
+    <div><p class="font-semibold">@Model.Title</p>@if (Model.Message is not null) { <p class="text-sm">@Model.Message</p> }</div>
+</div>

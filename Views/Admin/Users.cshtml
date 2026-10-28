@@ -1,36 +1,29 @@
 @model IReadOnlyList<UserListItem>
-@{
-    ViewData["Title"] = "Usuarios";
-}
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h1>Usuarios</h1><a class="btn btn-primary" asp-action="CreateUser">Crear usuario</a>
-</div>
-@if (TempData["Message"] is string message)
-{
-    <div class="alert alert-success">@message</div>
-}
-<div class="table-responsive">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Correo</th>
-                <th>Rol</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var user in Model)
-            {
-                <tr>
-                    <td>@user.FullName</td>
-                    <td>@user.Email</td>
-                    <td>@(user.Role == AppRoles.Doctor ? "Médico" : user.Role)</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+@{ ViewData["Title"] = "Usuarios"; }
+<div class="ui-page-header"><div><p class="ui-eyebrow">Administración</p><h1>Tu comunidad</h1><p class="ui-description">Consulta y encuentra a las personas que forman parte del sistema.</p></div><a class="ui-btn ui-btn-primary" asp-action="CreateUser"><partial name="UI/_Icon" model='@("plus")' />Crear usuario</a></div>
+@if (TempData["Message"] is string message) { <div class="mb-6"><partial name="UI/_Alert" model="@(new AlertUiModel(message))" /></div> }
+<div class="mb-6 grid gap-5 sm:grid-cols-3">
+    <partial name="UI/_Stat" model='@(new StatUiModel("Usuarios", Model.Count.ToString(), "Cuentas registradas", "users"))' />
+    <partial name="UI/_Stat" model='@(new StatUiModel("Médicos", Model.Count(u => u.Role == AppRoles.Doctor).ToString(), "Profesionales registrados", "shield"))' />
+    <partial name="UI/_Stat" model='@(new StatUiModel("Pacientes", Model.Count(u => u.Role == AppRoles.Patient).ToString(), "Cuentas de pacientes", "leaf"))' />
 </div>
 @if (Model.Count == 0)
 {
-    <p>No hay usuarios.</p>
+    <partial name="UI/_Empty" model='@(new EmptyUiModel("Aún no hay usuarios", "Crea una cuenta para empezar a formar tu comunidad.", "users"))' />
+}
+else
+{
+    <section class="ui-card" aria-label="Listado de usuarios" data-search-list>
+        <partial name="UI/_Search" model='@(new SearchUiModel("users-search", "Buscar usuarios", "Nombre o correo electrónico"))' />
+        <p class="ui-hint mb-3 md:hidden" id="users-table-help">Desliza la tabla para ver todas las columnas.</p>
+        <div class="ui-table-region" tabindex="0" role="region" aria-label="Tabla de usuarios" aria-describedby="users-table-help" data-search-results>
+            <table class="ui-table"><caption>Usuarios registrados</caption><thead><tr><th scope="col">Persona</th><th scope="col">Rol</th></tr></thead><tbody>
+            @foreach (var user in Model)
+            {
+                var role = user.Role == AppRoles.Doctor ? "Médico" : user.Role;
+                <tr data-search-item data-search-text="@user.FullName @user.Email"><td><div class="ui-person"><partial name="UI/_Avatar" model="@(new AvatarUiModel(user.FullName))" /><div class="ui-person-copy"><p class="font-semibold">@user.FullName</p><p class="text-muted">@user.Email</p></div></div></td><td><partial name="UI/_Badge" model="@(new BadgeUiModel(role))" /></td></tr>
+            }
+            </tbody></table>
+        </div>
+    </section>
 }

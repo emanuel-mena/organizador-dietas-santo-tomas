@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>organizador_dietas_santo_tomas</RootNamespace>
+    <DefaultItemExcludes>$(DefaultItemExcludes);node_modules/**;test-results/**;playwright-report/**</DefaultItemExcludes>
     <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
     <ContainerRuntimeIdentifier>win-x64</ContainerRuntimeIdentifier>
     <EnableSdkContainerDebugging>True</EnableSdkContainerDebugging>
@@ -15,6 +16,7 @@
 
   <ItemGroup>
     <ContainerPort Include="8081" />
+    <Content Remove="package.json;package-lock.json" />
   </ItemGroup>
 
   <ItemGroup>

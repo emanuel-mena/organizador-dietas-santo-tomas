@@ -1,0 +1,7 @@
+@model SearchUiModel
+<div class="ui-search mb-4">
+    <div class="min-w-0 w-full sm:w-auto sm:flex-1"><label class="ui-label" for="@Model.Id">@Model.Label</label><div class="ui-search-field"><partial name="UI/_Icon" model='@("search")' /><input class="ui-input" id="@Model.Id" type="search" placeholder="@Model.Placeholder" data-search-input /></div></div>
+    <button type="button" class="ui-btn ui-btn-secondary" data-search-clear>Limpiar</button>
+</div>
+<p class="mb-4 text-sm text-muted" role="status" data-search-count></p>
+<div hidden data-search-empty><partial name="UI/_Empty" model='@(new EmptyUiModel("Sin coincidencias", "Pruebe con otro nombre o correo electrónico.", "search"))' /></div>
