@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using organizador_dietas_santo_tomas.Data;
@@ -6,7 +7,14 @@ using organizador_dietas_santo_tomas.Services;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(ResolveConnectionString(builder.Configuration)));
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    // Railway termina TLS en su proxy; confiar en X-Forwarded-* de la red interna.
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.KnownIPNetworks.Clear();
+    options.KnownProxies.Clear();
+});
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.User.RequireUniqueEmail = true;
@@ -25,6 +33,13 @@ builder.Services.ConfigureApplicationCookie(options =>
 builder.Services.AddScoped<UserCreationService>();
 
 var app = builder.Build();
+app.UseForwardedHeaders();
+// Antes de la redireccion HTTPS: el healthcheck de Railway llega por HTTP directo.
+app.Use(async (ctx, next) =>
+{
+    if (ctx.Request.Path == "/healthz") { await ctx.Response.WriteAsync("ok"); return; }
+    await next();
+});
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -44,5 +59,25 @@ using (var scope = app.Services.CreateScope())
     await IdentitySeeder.SeedAsync(scope.ServiceProvider, app.Configuration, app.Logger);
 
 app.Run();
+
+static string? ResolveConnectionString(IConfiguration config)
+{
+    var configured = config.GetConnectionString("DefaultConnection");
+    if (!string.IsNullOrWhiteSpace(configured)) return configured;
+
+    // Railway PostgreSQL expone DATABASE_URL (postgresql://usuario:clave@host:puerto/db).
+    var url = config["DATABASE_URL"];
+    if (string.IsNullOrWhiteSpace(url)) return null;
+    var uri = new Uri(url);
+    var credentials = uri.UserInfo.Split(':', 2);
+    return new Npgsql.NpgsqlConnectionStringBuilder
+    {
+        Host = uri.Host,
+        Port = uri.Port > 0 ? uri.Port : 5432,
+        Database = uri.AbsolutePath.TrimStart('/'),
+        Username = Uri.UnescapeDataString(credentials[0]),
+        Password = credentials.Length > 1 ? Uri.UnescapeDataString(credentials[1]) : null,
+    }.ConnectionString;
+}
 
 public partial class Program { }

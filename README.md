@@ -206,3 +206,13 @@ Los artefactos de navegador quedan en `test-results/` (ignorado por Git), inclui
 La creación y asignación persistente de dietas queda para una etapa posterior. Esta entrega prepara sus componentes visuales y adapta las pantallas actuales, sin cambiar roles ni agregar migraciones.
 
 Compatibilidad visual: navegadores modernos de escritorio, Android e iOS compatibles con [Tailwind CSS 4](https://tailwindcss.com/docs/compatibility) (Chrome 111+, Safari 16.4+, Firefox 128+ como base).
+
+## Despliegue en Railway
+
+El repositorio incluye `Dockerfile` y `railway.toml` (healthcheck en `/healthz`).
+
+1. Cree un proyecto en Railway desde este repositorio y agregue el plugin **PostgreSQL**.
+2. En el servicio web defina las variables: `DATABASE_URL` = `${{Postgres.DATABASE_URL}}` (o `ConnectionStrings__DefaultConnection`), `SeedAdmin__Email` y `SeedAdmin__Password`.
+3. Despliegue. Las migraciones y el administrador inicial se aplican al arrancar; la app escucha en el `PORT` de Railway.
+
+Nota: las claves de Data Protection no se persisten, por lo que las sesiones activas se cierran en cada redeploy.
